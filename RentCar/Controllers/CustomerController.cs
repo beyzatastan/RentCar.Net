@@ -45,7 +45,7 @@ namespace RentCar.Controllers
 
             return Ok(customer);
         }
-
+        
         // POST: api/Customer
         [HttpPost("addCustomer")]
         public async Task<IActionResult> AddCustomer([FromBody] AddCustomerDto dto)
@@ -57,6 +57,7 @@ namespace RentCar.Controllers
 
             var customer = new CustomerModel
             {
+                UserId = dto.UserId,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 Email = dto.Email,

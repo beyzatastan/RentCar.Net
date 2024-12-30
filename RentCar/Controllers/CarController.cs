@@ -119,6 +119,8 @@ public class CarController : ControllerBase
             car.Year,
             car.LicensePlate,
             car.TransmissionType,
+            car.LocationId,
+            car.ImageUrl,
             car.SeatCount,
             car.DailyPrice,
             car.Supplier,
@@ -148,6 +150,59 @@ public class CarController : ControllerBase
 
         return Ok(carDto);
     }
+    [HttpGet("getCarsByUserId/{userId}")]
+    public async Task<IActionResult> GetCarsByUserId(int userId)
+    {
+        // Kullanıcının yaptığı booking'lere bağlı araçları getir
+        var cars = await _context.Cars
+            .Include(c => c.Bookings) // İlişkili Booking verisini yükle
+            .Include(c => c.Reviews)  // İlişkili Review verisini yükle
+            .Where(c => c.Bookings.Any(b => b.Customer.UserId == userId)) // Kullanıcının ID'sine göre filtreleme
+            .ToListAsync();
+
+        if (!cars.Any())
+        {
+            return NotFound($"No cars found for user with ID {userId}");
+        }
+
+        var carDtos = cars.Select(car => new
+        {
+            car.Id,
+            car.Brand,
+            car.Model,
+            car.Year,
+            car.LicensePlate,
+            car.TransmissionType,
+            car.SeatCount,
+            car.DailyPrice,
+            car.Supplier,
+            car.SupplierId,
+            car.GasType,
+            car.Deposit,
+            car.CarClass,
+            Bookings = car.Bookings != null && car.Bookings.Any()
+                ? car.Bookings.Select(b => new
+                {
+                    b.Id,
+                    b.CarId,
+                    b.StartDate,
+                    b.EndDate
+                }).ToList()
+                : null,
+            Reviews = car.Reviews != null && car.Reviews.Any()
+                ? car.Reviews.Select(r => new
+                {
+                    r.Id,
+                    r.Rating,
+                    r.Comment,
+                    r.DateCreated
+                }).ToList()
+                : null,
+        }).ToList();
+
+        return Ok(carDtos);
+    }
+
 
     // PUT: api/car/{id}
     [HttpPut("updateCarById/{carId}")]

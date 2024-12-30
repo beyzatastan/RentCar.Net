@@ -5,6 +5,7 @@ namespace RentCar.DTOS.CustomerDTO;
 
 public class AddCustomerDto
 {
+    public int UserId { get; set; } 
    public string FirstName { get; set; } = string.Empty; // User's first name
 
     public string LastName { get; set; } = string.Empty; // User's last name

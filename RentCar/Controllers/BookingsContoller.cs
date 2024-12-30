@@ -100,13 +100,13 @@ public class BookingsContoller:ControllerBase
 
             return Ok(bookings);
         }
-        [HttpGet("getBookingsByCustomer/{customerId}")]
-        public async Task<IActionResult> GetBookingsByCustomer(int customerId)
+        [HttpGet("getBookingsByUser/{userId}")]
+        public async Task<IActionResult> GetBookingsByUser(int userId)
         {
             var bookings = await _context.Bookings
-                .Where(b => b.CustomerId == customerId) // CustomerId'ye göre filtreleme
+                .Where(b => b.Customer.UserId == userId) // Users tablosundaki UserId ile eşleştir
                 .Include(b => b.Car)
-                .Include(b => b.Customer)
+                .Include(b => b.Customer) // Customers tablosundaki bilgiler
                 .Include(b => b.StartLocation) // Başlangıç lokasyonu
                 .Include(b => b.EndLocation)   // Bitiş lokasyonu
                 .Select(b => new BookingDto
@@ -115,8 +115,8 @@ public class BookingsContoller:ControllerBase
                     CustomerId = b.CustomerId,
                     CarId = b.CarId,
                     CarModel = b.Car.Model,
-                    StartLocation = b.StartLocation.City, // veya istediğiniz alan
-                    EndLocation = b.EndLocation.City,     // veya istediğiniz alan
+                    StartLocation = b.StartLocation.City, // Başlangıç lokasyonu
+                    EndLocation = b.EndLocation.City,     // Bitiş lokasyonu
                     StartDate = b.StartDate,
                     EndDate = b.EndDate,
                 })
@@ -124,12 +124,11 @@ public class BookingsContoller:ControllerBase
 
             if (!bookings.Any())
             {
-                return NotFound($"No bookings found for customer with ID {customerId}");
+                return NotFound($"No bookings found for user with ID {userId}");
             }
 
             return Ok(bookings);
         }
-
 
     }
 
