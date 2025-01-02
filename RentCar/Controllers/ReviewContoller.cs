@@ -46,8 +46,7 @@ public class ReviewContoller:ControllerBase
                 CarId = r.CarId,
                 Rating = r.Rating,
                 Comment = r.Comment,
-                // Tarihi formatlayarak döndürme
-                CreateDate = r.DateCreated
+                CreateDate = DateTime.UtcNow
             })
             .ToListAsync();
 

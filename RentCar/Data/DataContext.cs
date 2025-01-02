@@ -22,6 +22,7 @@ public class DataContext : DbContext
     public DbSet<BookingModel> Bookings { get; set; }
     public DbSet<ReviewModel> Reviews { get; set; }
     public DbSet<RentImages> RentImages { get; set; } 
+    public DbSet<UserModel> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,5 +64,12 @@ public class DataContext : DbContext
         modelBuilder.Entity<CarModel>()
             .Property(c => c.DailyPrice)
             .HasPrecision(18, 2); // Explicit precision for decimal values
+        
+        modelBuilder.Entity<UserModel>()
+            .HasMany(u => u.Customers) // Bir User'ın birden fazla Customer'ı olabilir
+            .WithOne(c => c.User)      // Her Customer bir User'a bağlıdır
+            .HasForeignKey(c => c.UserId) // Foreign key Customer içinde tanımlıdır
+            .OnDelete(DeleteBehavior.Restrict); // User silindiğinde bağlı Customer'lar da silinsin
+
     }
 }

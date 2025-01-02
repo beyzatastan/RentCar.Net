@@ -9,41 +9,36 @@ public class CustomerModel
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; } // Primary Key
+    public int Id { get; set; }
 
+    [Required, ForeignKey("User")]
+    public int UserId { get; set; } // Foreign key
+    public UserModel User { get; set; } // Navigation property
 
-    public string FirstName { get; set; } = string.Empty; // User's first name
-
-    
-    public string LastName { get; set; } = string.Empty; // User's last name
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
 
     [EmailAddress]
-    public string Email { get; set; } = string.Empty; // User's email address for login and communication
+    public string Email { get; set; } = string.Empty;
 
-   
-    public string PhoneNumber { get; set; } = string.Empty; // Hashed password for security
- 
-    [ StringLength(11)]
-    public string IdentityNumber { get; set; } // National ID
-    
-    public DateTime DrivingLicenseIssuedDate { get; set; } // Driving license issue date
+    public string PhoneNumber { get; set; } = string.Empty;
 
-    [ StringLength(20)]
-    public string DrivingLicenseNumber { get; set; } // Driving license number
+    [StringLength(11)]
+    public string IdentityNumber { get; set; }
 
+    public DateTime DrivingLicenseIssuedDate { get; set; }
 
-    public DateTime BirthDate { get; set; } // Birth date
+    [StringLength(20)]
+    public string DrivingLicenseNumber { get; set; }
 
+    public DateTime BirthDate { get; set; }
 
-    public string City { get; set; } // City
-  
-    public string District { get; set; }
+    public string City { get; set; } = string.Empty;
+    public string District { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string PostalCode { get; set; } = string.Empty;
 
-    public string Address { get; set; } 
-
-    public string PostalCode { get; set; } 
-    
-    public string Role { get; set; }  // Role of the user, such as 'Customer' or 'Admin'
+    public string Role { get; set; } = "Customer"; // Property olarak düzenlendi
 
     public ICollection<ReviewModel> Reviews { get; set; } = new HashSet<ReviewModel>();
     public ICollection<BookingModel> Bookings { get; set; } = new HashSet<BookingModel>();
