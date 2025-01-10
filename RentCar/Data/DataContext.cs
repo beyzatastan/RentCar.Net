@@ -11,6 +11,7 @@ public class DataContext : DbContext
 
  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
    {
+    // you should add your path
     optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER,1433;TrustServerCertificate=True;");
    }
  
