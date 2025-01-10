@@ -11,7 +11,7 @@ public class DataContext : DbContext
 
  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
    {
-    optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER,1433;Database=rentcar;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;");
+    optionsBuilder.UseSqlServer("Server=localhost\\MSSQLSERVER,1433;TrustServerCertificate=True;");
    }
  
     // DbSet declarations
